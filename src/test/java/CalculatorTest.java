@@ -1,4 +1,6 @@
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -45,12 +47,22 @@ public class CalculatorTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void NotNewLineCommaAdjacent(){
-        assertThat(Calculator.add("1,\n,3"),is(4));
+        assertThat(Calculator.add("1,\n,3"),is(-1));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void OnlyNumbers(){
-        assertThat(Calculator.add("1,a,3"),is(4));
+        assertThat(Calculator.add("1,a,3"),is(-1));
+    }
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @Test
+    public void NegativeNumbers() throws IllegalArgumentException {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Negative numbers: -1,-3,-100");
+        assertThat(Calculator.add("-1,2,-3,4,5,6,-100"), is(-1));
     }
 
 }
