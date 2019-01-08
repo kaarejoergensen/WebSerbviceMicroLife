@@ -66,4 +66,11 @@ public class CalculatorTest {
         assertThat(Calculator.add("-1,2,-3,4,5,6,-100"), is(-1));
     }
 
+    @Test
+    public void SupportOfDifferentDelimiters(){
+        assertThat(Calculator.add("//;\\n1;2"),is(3));
+    }
+
+
+
 }
