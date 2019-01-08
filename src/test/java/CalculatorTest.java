@@ -8,6 +8,7 @@ public class CalculatorTest {
     @Test
     public void MiniTest() {
         assertThat("a", is("a"));
+        assertThat("b", is("b"));
     }
 
     @Test
