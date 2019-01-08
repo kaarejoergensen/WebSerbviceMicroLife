@@ -53,4 +53,11 @@ public class CalculatorTest {
         assertThat(Calculator.add("1,a,3"),is(4));
     }
 
+    @Test
+    public void SupportOfDifferentDelimiters(){
+        assertThat(Calculator.add("//;\\n1;2"),is(3));
+    }
+
+
+
 }

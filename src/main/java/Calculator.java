@@ -6,8 +6,18 @@ public class Calculator {
         if (numbers == null || numbers.equals("")) {
             return 0;
         }
+        char delimeter = ',';
+        //Custom delimetsrs
+        try{
+            if(numbers.charAt(0) == '/' && numbers.charAt(0) == '/'){
+                delimeter= numbers.charAt(2);
+                numbers = numbers.substring(5,numbers.length());
+            }
+        }catch(Exception e){
+            throw new IllegalArgumentException();
+        }
         //Splitter etter mellomrom, newline, eller komme
-        String[] numberArray = numbers.split(",|\n");
+        String[] numberArray = numbers.split( delimeter + "|\n");
         int[] numberos = new int[numberArray.length];
         //Sjekker om alt er number - legger til i numberlort
         for(int i = 0; i < numberArray.length ; i++){
