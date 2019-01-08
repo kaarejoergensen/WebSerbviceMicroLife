@@ -10,6 +10,7 @@ pipeline {
             }
             steps {
                 sh 'mvn clean package'
+                sh 'java -jar target/webserver-1.0-SNAPSHOT.jar plus 100 100'
             }
         }
     }
