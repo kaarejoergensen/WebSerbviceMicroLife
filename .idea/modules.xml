@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WebLife-proj.iml" filepath="$PROJECT_DIR$/WebLife-proj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webserver.iml" filepath="$PROJECT_DIR$/webserver.iml" />
     </modules>
   </component>
 </project>
