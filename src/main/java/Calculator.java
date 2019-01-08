@@ -2,7 +2,7 @@ public class Calculator {
 
 
 
-    public static int Add(String numbers) {
+    public static int add(String numbers) {
         if (numbers == null || numbers.equals("")) {
             return 0;
         }
@@ -14,7 +14,7 @@ public class Calculator {
             try{
                 numberos[i] = Integer.parseInt(numberArray[i]);
             }catch(NumberFormatException e){
-                return 0;
+                throw new IllegalArgumentException();
             }
         }
 
