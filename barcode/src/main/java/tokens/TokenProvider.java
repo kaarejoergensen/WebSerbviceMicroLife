@@ -1,5 +1,7 @@
 package tokens;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -8,9 +10,7 @@ import io.jsonwebtoken.security.SignatureException;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class TokenProvider {
     private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
@@ -18,22 +18,13 @@ public class TokenProvider {
     public TokenProvider() {
     }
 
-    public List<String> issueTokens(String userName, String userId, int numberOfTokens) {
-        if (numberOfTokens < 1 || numberOfTokens > 5)
-            throw new IllegalArgumentException("The number of tokens must be between 1 and 5");
-        List<String> tokens = new ArrayList<>();
+    public String issueToken(String userName, String userId) {
         LocalDateTime expiration = LocalDateTime.now().plusDays(7);
         Date out = Date.from(expiration.atZone(ZoneId.systemDefault()).toInstant());
-
-        for (int i = 0; i < numberOfTokens; i++) {
-            String token = Jwts.builder()
-                    .setSubject(userName)
-                    .setId(userId)
-                    .setExpiration(out).signWith(key).compact();
-            tokens.add(token);
-        }
-
-        return tokens;
+        return Jwts.builder()
+                .setSubject(userName)
+                .setId(userId)
+                .setExpiration(out).signWith(key).compact();
     }
 
     public boolean checkToken(String tokenString) {
@@ -45,5 +36,17 @@ public class TokenProvider {
             return false;
         }
         return true;
+    }
+
+    public String getUserName(String tokenString) {
+        Jws<Claims> claims;
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(tokenString);
+        } catch(SignatureException e ) {
+            throw new IllegalArgumentException("Token not valid");
+        }
+        return claims.getBody().getSubject();
     }
 }

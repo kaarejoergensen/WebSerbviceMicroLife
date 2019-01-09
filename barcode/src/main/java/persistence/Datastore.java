@@ -1,11 +1,11 @@
 package persistence;
 
 public interface Datastore {
-    void useToken(String tokenString, String userName);
+    void useToken(String tokenString);
 
     boolean isTokenUsed(String tokenString);
 
-    void addNumberOfUnusedTokens(int numberOfTokens, String userName);
+    void addTokens(int tokens, String userName);
 
     int getNumberOfUnusedTokens(String userName);
 }

@@ -1,17 +1,23 @@
 package persistence;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import tokens.TokenProvider;
+
+import java.util.*;
 
 public class MemoryDataStore implements Datastore {
+    private TokenProvider tokenProvider;
+
+    public MemoryDataStore(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
     private Map<String, Integer> numberOfUnusedTokenMap = new HashMap<>();
     private Set<String> usedTokens = new HashSet<>();
 
     @Override
-    public void useToken(String tokenString, String userName) {
+    public void useToken(String tokenString) {
         this.usedTokens.add(tokenString);
+        String userName = this.tokenProvider.getUserName(tokenString);
         Integer numberOfUnusedTokens = this.numberOfUnusedTokenMap.get(userName);
         if (numberOfUnusedTokens != null) {
             this.numberOfUnusedTokenMap.put(tokenString, --numberOfUnusedTokens);
@@ -24,12 +30,12 @@ public class MemoryDataStore implements Datastore {
     }
 
     @Override
-    public void addNumberOfUnusedTokens(int numberOfTokens, String userName) {
+    public void addTokens(int tokens, String userName) {
         Integer numberOfUnusedTokens = this.numberOfUnusedTokenMap.get(userName);
         if (numberOfUnusedTokens == null)
             numberOfUnusedTokens = 0;
-        numberOfTokens += numberOfUnusedTokens;
-        this.numberOfUnusedTokenMap.put(userName, numberOfTokens);
+        numberOfUnusedTokens += tokens;
+        this.numberOfUnusedTokenMap.put(userName, numberOfUnusedTokens);
     }
 
     @Override
