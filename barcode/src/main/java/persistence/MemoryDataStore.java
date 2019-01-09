@@ -20,7 +20,7 @@ public class MemoryDataStore implements Datastore {
         String userName = this.tokenProvider.getUserName(tokenString);
         Integer numberOfUnusedTokens = this.numberOfUnusedTokenMap.get(userName);
         if (numberOfUnusedTokens != null) {
-            this.numberOfUnusedTokenMap.put(tokenString, --numberOfUnusedTokens);
+            this.numberOfUnusedTokenMap.put(userName, numberOfUnusedTokens - 1);
         }
     }
 

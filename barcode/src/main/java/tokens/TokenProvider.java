@@ -1,9 +1,6 @@
 package tokens;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 
@@ -32,7 +29,7 @@ public class TokenProvider {
             Jwts.parser()
                     .setSigningKey(key)
                     .parseClaimsJws(tokenString);
-        } catch(SignatureException e ) {
+        } catch(SignatureException | MalformedJwtException e ) {
             return false;
         }
         return true;
