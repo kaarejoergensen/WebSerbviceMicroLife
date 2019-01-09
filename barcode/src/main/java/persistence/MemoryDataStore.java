@@ -6,22 +6,23 @@ import java.util.*;
 
 public class MemoryDataStore implements Datastore {
     private TokenProvider tokenProvider;
+    private Map<String, Integer> numberOfUnusedTokenMap;
+    private Set<String> usedTokens;
 
     public MemoryDataStore(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
+        this.numberOfUnusedTokenMap = new HashMap<>();
+        this.usedTokens = new HashSet<>();
     }
-
-    private Map<String, Integer> numberOfUnusedTokenMap = new HashMap<>();
-    private Set<String> usedTokens = new HashSet<>();
 
     @Override
     public void useToken(String tokenString) {
-        this.usedTokens.add(tokenString);
         String userName = this.tokenProvider.getUserName(tokenString);
         Integer numberOfUnusedTokens = this.numberOfUnusedTokenMap.get(userName);
-        if (numberOfUnusedTokens != null) {
-            this.numberOfUnusedTokenMap.put(userName, numberOfUnusedTokens - 1);
-        }
+        if (numberOfUnusedTokens == null)
+            throw new IllegalArgumentException("The token does not exist");
+        this.usedTokens.add(tokenString);
+        this.numberOfUnusedTokenMap.put(userName, numberOfUnusedTokens - 1);
     }
 
     @Override

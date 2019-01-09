@@ -15,12 +15,13 @@ public class BarcodeTest {
     private String userId = "1234";
 
     private TokenProvider tokenProvider;
+    private Datastore datastore;
     private BarcodeProvider barcodeProvider;
 
     @Before
     public void init() {
         this.tokenProvider = new TokenProvider();
-        Datastore datastore = new MemoryDataStore(tokenProvider);
+        this.datastore = new MemoryDataStore(tokenProvider);
         this.barcodeProvider = new BarcodeProvider(tokenProvider, datastore);
     }
 
@@ -62,14 +63,15 @@ public class BarcodeTest {
         List<String> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(1));
+        assertThat(datastore.getNumberOfUnusedTokens(this.userName), is(1));
         assertThat(barcodeProvider.useToken(tokens.get(0)), is(true));
+        assertThat(datastore.getNumberOfUnusedTokens(this.userName), is(0));
         assertThat(barcodeProvider.useToken(tokens.get(0)), is(false));
     }
 
     @Test
     public void getTokenIfOnlyOneUnused() {
-        List<String> tokens;
-        tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
+        List<String> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
         tokens.addAll(barcodeProvider.getTokens(this.userName, this.userId, 1));
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(2));
@@ -80,6 +82,7 @@ public class BarcodeTest {
     @Test(expected = IllegalArgumentException.class)
     public void maxOneUnusedToken() {
         barcodeProvider.getTokens(this.userName, this.userId, 2);
+        assertThat(datastore.getNumberOfUnusedTokens(this.userName), is(2));
         barcodeProvider.getTokens(this.userName, this.userId, 1);
     }
 
