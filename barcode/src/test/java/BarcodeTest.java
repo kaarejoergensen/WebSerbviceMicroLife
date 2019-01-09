@@ -97,6 +97,8 @@ public class BarcodeTest {
     public static void cleanUpQRCodes() throws IOException {
         String directory = System.getProperty("user.dir") + "/images/";
         Path path = FileSystems.getDefault().getPath(directory);
-        Files.walk(path).map(Path::toFile).filter(f -> !f.isDirectory()).forEach(System.out::println);
+        Files.walk(path).map(Path::toFile).
+                sorted((o1, o2) -> Boolean.compare(o1.isDirectory(), o2.isDirectory())).
+                forEach(f -> System.out.println("Deleting " + f + " " + f.delete()));
     }
 }
