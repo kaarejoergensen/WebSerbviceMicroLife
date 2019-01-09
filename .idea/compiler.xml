@@ -6,11 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="webserver" />
+        <module name="barcode" />
+        <module name="calculator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="webserver" target="8" />
+      <module name="barcode" target="8" />
+      <module name="calculator" target="8" />
+      <module name="webserver" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

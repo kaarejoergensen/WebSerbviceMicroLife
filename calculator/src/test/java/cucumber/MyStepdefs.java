@@ -2,11 +2,10 @@ package cucumber;
 
 import calculator.Calculator;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import cucumber.api.java.en.When;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 
 public class MyStepdefs {
     private String number;
@@ -24,6 +23,6 @@ public class MyStepdefs {
 
     @Then("^I should return (\\d+)$")
     public void iShouldReturn(int expected) {
-        assertThat(expected, is(actualAnswer));
+        Assert.assertThat(expected, CoreMatchers.is(actualAnswer));
     }
 }

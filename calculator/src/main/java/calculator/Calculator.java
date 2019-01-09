@@ -46,7 +46,6 @@ public class Calculator {
             throw new IllegalArgumentException("Negative numbers: " + negativeNumbers.stream().
                     map(Objects::toString).collect(Collectors.joining(",")));
         return sum;
+
     }
-
-
 }
