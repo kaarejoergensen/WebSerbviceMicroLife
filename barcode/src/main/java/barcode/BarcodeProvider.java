@@ -12,6 +12,7 @@ import tokens.TokenProvider;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +55,12 @@ public class BarcodeProvider {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         String directory = System.getProperty("user.dir") + "/images/";
         String randomString = RandomStringUtils.randomAlphabetic(10);
-        Path path = FileSystems.getDefault().getPath(directory + randomString+ ".png");
-        BitMatrix bitMatrix;
+        Path directoryPath = FileSystems.getDefault().getPath(directory);
         try {
-            bitMatrix = qrCodeWriter.encode(tokenString, BarcodeFormat.QR_CODE, QR_SIZE, QR_SIZE);
+            if (Files.notExists(directoryPath)) Files.createDirectory(directoryPath);
+            Path path = FileSystems.getDefault().getPath(directory + randomString + ".png");
+
+            BitMatrix bitMatrix = qrCodeWriter.encode(tokenString, BarcodeFormat.QR_CODE, QR_SIZE, QR_SIZE);
             MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
         } catch (WriterException | IOException e) {
             throw new QRException(e.getMessage(), e);
