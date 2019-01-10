@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/barcode/barcode.iml" filepath="$PROJECT_DIR$/barcode/barcode.iml" />
       <module fileurl="file://$PROJECT_DIR$/calculator/calculator.iml" filepath="$PROJECT_DIR$/calculator/calculator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/restserver/restserver.iml" filepath="$PROJECT_DIR$/restserver/restserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/webserver.iml" filepath="$PROJECT_DIR$/webserver.iml" />
     </modules>
   </component>
