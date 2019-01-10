@@ -18,6 +18,7 @@
         <module>barcode</module>
         <module>calculator</module>
         <module>restserver</module>
+        <module>thornrestserver</module>
     </modules>
     <packaging>pom</packaging>
 
