@@ -1,11 +1,12 @@
 package models;
 
+import com.google.zxing.common.BitMatrix;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BarcodeTokenPair {
+public class TokenBarcodePair {
     private String token;
-    private String barcodePath;
+    private BitMatrix barcode;
 }

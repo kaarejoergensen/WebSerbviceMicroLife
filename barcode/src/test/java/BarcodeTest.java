@@ -1,17 +1,12 @@
 import barcode.BarcodeProvider;
 import exceptions.QRException;
-import models.BarcodeTokenPair;
-import org.junit.AfterClass;
+import models.TokenBarcodePair;
 import org.junit.Before;
 import org.junit.Test;
 import persistence.Datastore;
 import persistence.MemoryDataStore;
 import tokens.TokenProvider;
 
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -35,10 +30,10 @@ public class BarcodeTest {
 
     @Test
     public void issueTokens() throws QRException {
-        Set<BarcodeTokenPair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 5);
+        Set<TokenBarcodePair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 5);
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(5));
-        for (BarcodeTokenPair token : tokens) {
+        for (TokenBarcodePair token : tokens) {
             assertThat(tokenProvider.checkToken(token.getToken()), is(true));
         }
     }
@@ -50,7 +45,7 @@ public class BarcodeTest {
 
     @Test
     public void tamperedToken() throws QRException {
-        Set<BarcodeTokenPair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
+        Set<TokenBarcodePair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(1));
         assertThat(tokenProvider.checkToken(tokens.iterator().next().getToken() + "1234"), is(false));
@@ -68,7 +63,7 @@ public class BarcodeTest {
 
     @Test
     public void useToken() throws QRException {
-        Set<BarcodeTokenPair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
+        Set<TokenBarcodePair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(1));
         assertThat(datastore.getNumberOfUnusedTokens(this.userName), is(1));
@@ -79,7 +74,7 @@ public class BarcodeTest {
 
     @Test
     public void getTokenIfOnlyOneUnused() throws QRException {
-        Set<BarcodeTokenPair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
+        Set<TokenBarcodePair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
         tokens.addAll(barcodeProvider.getTokens(this.userName, this.userId, 1));
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(2));
@@ -94,12 +89,4 @@ public class BarcodeTest {
         barcodeProvider.getTokens(this.userName, this.userId, 1);
     }
 
-    @AfterClass
-    public static void cleanUpQRCodes() throws IOException {
-        String directory = System.getProperty("user.dir") + "/images/";
-        Path path = FileSystems.getDefault().getPath(directory);
-        Files.walk(path).map(Path::toFile).
-                sorted((o1, o2) -> Boolean.compare(o1.isDirectory(), o2.isDirectory())).
-                forEach(f -> System.out.println("Deleting " + f + " " + f.delete()));
-    }
 }
