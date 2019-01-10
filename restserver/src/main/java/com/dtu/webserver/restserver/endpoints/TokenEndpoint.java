@@ -34,7 +34,7 @@ public class TokenEndpoint {
             }
             return ResponseEntity.status(HttpStatus.OK).body(finalTokens);
         } catch (QRException | IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

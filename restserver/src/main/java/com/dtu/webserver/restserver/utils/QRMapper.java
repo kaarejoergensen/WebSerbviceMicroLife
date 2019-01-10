@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class QRMapper {
-    public static final String IMAGE_DIR = "/restserver/images/";
+    public static final String IMAGE_DIR = "/images/";
 
     public static String saveQRToDisk(BitMatrix qrMatrix) throws IOException {
         String directory = System.getProperty("user.dir") + IMAGE_DIR;
