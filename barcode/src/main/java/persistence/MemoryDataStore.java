@@ -5,11 +5,13 @@ import tokens.TokenProvider;
 import java.util.*;
 
 public class MemoryDataStore implements Datastore {
+    private int totalNumberOfTokensIssued;
     private TokenProvider tokenProvider;
     private Map<String, Integer> numberOfUnusedTokenMap;
     private Set<String> usedTokens;
 
     public MemoryDataStore(TokenProvider tokenProvider) {
+        this.totalNumberOfTokensIssued = 0;
         this.tokenProvider = tokenProvider;
         this.numberOfUnusedTokenMap = new HashMap<>();
         this.usedTokens = new HashSet<>();
@@ -43,5 +45,15 @@ public class MemoryDataStore implements Datastore {
     public int getNumberOfUnusedTokens(String userName) {
         Integer numberOfUnusedTokens = this.numberOfUnusedTokenMap.get(userName);
         return numberOfUnusedTokens != null ? numberOfUnusedTokens : 0;
+    }
+
+    @Override
+    public int getTotalNumberOfTokensIssued() {
+        return totalNumberOfTokensIssued;
+    }
+
+    @Override
+    public void setTotalNumberOfTokensIssued(int totalNumberOfTokensIssued) {
+        this.totalNumberOfTokensIssued = totalNumberOfTokensIssued;
     }
 }

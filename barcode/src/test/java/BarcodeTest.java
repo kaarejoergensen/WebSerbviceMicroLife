@@ -1,5 +1,6 @@
 import barcode.BarcodeProvider;
 import exceptions.QRException;
+import models.BarcodeTokenPair;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -34,11 +35,11 @@ public class BarcodeTest {
 
     @Test
     public void issueTokens() throws QRException {
-        List<String> tokens = barcodeProvider.getTokens(this.userName, this.userId, 5);
+        Set<BarcodeTokenPair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 5);
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(5));
-        for (String token : tokens) {
-            assertThat(tokenProvider.checkToken(token), is(true));
+        for (BarcodeTokenPair token : tokens) {
+            assertThat(tokenProvider.checkToken(token.getToken()), is(true));
         }
     }
 
@@ -49,10 +50,10 @@ public class BarcodeTest {
 
     @Test
     public void tamperedToken() throws QRException {
-        List<String> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
+        Set<BarcodeTokenPair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(1));
-        assertThat(tokenProvider.checkToken(tokens.get(0) + "1234"), is(false));
+        assertThat(tokenProvider.checkToken(tokens.iterator().next().getToken() + "1234"), is(false));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -67,22 +68,22 @@ public class BarcodeTest {
 
     @Test
     public void useToken() throws QRException {
-        List<String> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
+        Set<BarcodeTokenPair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(1));
         assertThat(datastore.getNumberOfUnusedTokens(this.userName), is(1));
-        assertThat(barcodeProvider.useToken(tokens.get(0)), is(true));
+        assertThat(barcodeProvider.useToken(tokens.iterator().next().getToken()), is(true));
         assertThat(datastore.getNumberOfUnusedTokens(this.userName), is(0));
-        assertThat(barcodeProvider.useToken(tokens.get(0)), is(false));
+        assertThat(barcodeProvider.useToken(tokens.iterator().next().getToken()), is(false));
     }
 
     @Test
     public void getTokenIfOnlyOneUnused() throws QRException {
-        List<String> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
+        Set<BarcodeTokenPair> tokens = barcodeProvider.getTokens(this.userName, this.userId, 1);
         tokens.addAll(barcodeProvider.getTokens(this.userName, this.userId, 1));
         assertThat(tokens, is(notNullValue()));
         assertThat(tokens.size(), is(2));
-        barcodeProvider.useToken(tokens.get(0));
+        barcodeProvider.useToken(tokens.iterator().next().getToken());
         barcodeProvider.getTokens(this.userName, this.userId, 1);
     }
 

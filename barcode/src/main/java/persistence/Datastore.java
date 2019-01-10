@@ -8,4 +8,8 @@ public interface Datastore {
     void addTokens(int tokens, String userName);
 
     int getNumberOfUnusedTokens(String userName);
+
+    int getTotalNumberOfTokensIssued();
+
+    void setTotalNumberOfTokensIssued(int totalNumberOfTokensIssued);
 }

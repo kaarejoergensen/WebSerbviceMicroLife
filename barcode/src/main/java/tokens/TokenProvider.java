@@ -15,12 +15,13 @@ public class TokenProvider {
     public TokenProvider() {
     }
 
-    public String issueToken(String userName, String userId) {
+    public String issueToken(String userName, String userId, int tokenCount) {
         LocalDateTime expiration = LocalDateTime.now().plusDays(7);
         Date out = Date.from(expiration.atZone(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .setSubject(userName)
                 .setId(userId)
+                .claim("count", tokenCount)
                 .setExpiration(out).signWith(key).compact();
     }
 
